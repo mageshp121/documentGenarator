@@ -1,15 +1,14 @@
 import DocumentGenerator from "./genaratorClass";
-import fs from "fs";
 import path = require("path");
 
-async function genarateDocument(documentType: string, templateType: string) {
+export async function genarateDocument(documentType: string, templateType: string,data:Record<string,any>) {
   const documentGenerator = new DocumentGenerator();
   await documentGenerator.initialize();
   try {
     if (documentType === "pdf") {
-      return await documentGenerator.generatePDF(templateType);
+      return await documentGenerator.generatePDF(data,templateType);
     } else if (documentType === "image") {
-      return await documentGenerator.generateImage(templateType);
+      return await documentGenerator.generateImage(data,templateType);
     } else {
       throw new Error("Unsupported document type.");
     }
@@ -20,19 +19,8 @@ async function genarateDocument(documentType: string, templateType: string) {
   }
 }
 
-const documentType = "pdf";
-const templateType = "paymentInvoiceTemplate";
-genarateDocument(documentType, templateType).then((bufferData) => {
-    if(bufferData){
-        const outputPath = path.join(__dirname, "..", "files", "make.pdf");
-        fs.writeFile(outputPath,bufferData,(err)=>{
-            if(err){
-                console.log("error occured",err);
-            }else{
-                 console.log("file saved");
-            }
-        })  
-    }
-});
+
+
+
 
 

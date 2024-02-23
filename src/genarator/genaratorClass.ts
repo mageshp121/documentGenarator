@@ -1,6 +1,5 @@
 import ejs from 'ejs';
 import puppeteer from 'puppeteer';
-import path from 'path'
 
 class DocumentGenerator {
     private browser: any
@@ -10,33 +9,24 @@ class DocumentGenerator {
     public async initialize(): Promise<void> {
         this.browser = await puppeteer.launch();
     }
-    // public async generatePDF(data: Record<string, any>, templateType: string): Promise<Buffer> {
-    //     const htmlContent = await this.renderTemplate(templateType, data);
-    //     return this.generateDocument(htmlContent, 'pdf');
-    // }
-    public async generatePDF( templateType: string): Promise<Buffer> {
-        const htmlContent = await this.renderTemplate(templateType);
+    public async generatePDF(data: Record<string, any>, templateType: string): Promise<Buffer> {
+        const htmlContent = await this.renderTemplate(templateType, data);
         return this.generateDocument(htmlContent, 'pdf');
     }
-    
-    // public async generateImage(data: Record<string, any>, templateType: string): Promise<Buffer> {
-    //     const htmlContent = await this.renderTemplate(templateType,data);
-    //     return this.generateDocument(htmlContent, 'image');
-    // }
-        
-    public async generateImage( templateType: string): Promise<Buffer> {
-        const htmlContent = await this.renderTemplate(templateType);
+
+    public async generateImage(data: Record<string, any>, templateType: string): Promise<Buffer> {
+        const htmlContent = await this.renderTemplate(templateType,data);
         return this.generateDocument(htmlContent, 'image');
     }
+        
 
-    // private async renderTemplate(templateType: string, data: Record<string, any>): Promise<string> {
-    //     const templatePath = `templates/${templateType}.ejs`;
-    //     return await ejs.renderFile(templatePath, { data });
-    // }
-    private async renderTemplate(templateType: string): Promise<string> {
-        const templatePath = path.join(__dirname, '..','templates', `${templateType}.ejs`);
-        return await ejs.renderFile(templatePath);
+
+    private async renderTemplate(templateType: string, data: Record<string, any>): Promise<string> {
+        const templatePath = `templates/${templateType}.ejs`;
+        return await ejs.renderFile(templatePath, { data });
     }
+
+   
     private async generateDocument(htmlContent: string, documentType: string): Promise<Buffer> {
         if (!this.browser) {
             throw new Error('Browser is not initialized.');
